@@ -14,7 +14,6 @@ export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Prom
   const budget = new Budget(cfg.ynabKey);
   await budget.loadBudget(cfg.ynabBudgetId);
 
-  // Identify the YNAB account id 
   const bank = cfg.banks.find(b => b.bankId === data.bankId);
   const account = bank.accounts.find(a => a.accountName === data.accountName);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
