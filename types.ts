@@ -7,12 +7,12 @@ export interface TransactionsMessage {
   username: string;
   bankId: string;
   accountName: string;
-  ynabAccountName: string;
   transactions: BankTransaction[];
 }
 
 export interface BankAccount {
   accountName: string;
+  ynabAccountName: string;
 }
 
 export interface Bank {
@@ -27,6 +27,14 @@ export interface UserConfig {
   banks: Bank[];
 }
 
-export interface IBudget {
-  getAccounts();
+export interface BudgetTransaction {
+  date: string;
+  amount: number;
+  memo: string;
+  accountId: string;
+}
+
+export interface BudgetAccount {
+  accountName: string;
+  accountId: string;
 }
