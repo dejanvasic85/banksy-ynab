@@ -2,7 +2,7 @@ service:
   name: banksy-ynab
 
 custom:
-  bankTransactionSnsArn: http://valuewillgohere
+  bankTransactionSnsArn: arn:aws:sns:ap-southeast-2:020250243072:banksy-dejan
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
