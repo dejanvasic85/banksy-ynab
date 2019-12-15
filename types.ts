@@ -23,5 +23,10 @@ export interface Bank {
 
 export interface UserConfig {
   ynabKey: string;
+  ynabBudgetId: string;
   banks: Bank[];
+}
+
+export interface IBudget {
+  getAccounts();
 }

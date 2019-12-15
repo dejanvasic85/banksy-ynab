@@ -6,11 +6,13 @@ import { getSecret } from './secretFetcher';
 export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Promise<void> => {
   console.log('Parsing message');
   const data : TransactionsMessage = JSON.parse(event.Records[0].Sns.Message);
-  const userConfig : UserConfig = await getSecret(data.username);
-  
+  const userSecret = await getSecret(data.username);
+  const cfg : UserConfig = JSON.parse(userSecret);
+  console.log('userConfig', cfg);
+
   for (const txn of data.transactions) {
-    
+    console.log('txn', txn);
   }
 
-  console.log('received data', data, 'user config', userConfig);
+  console.log('received data', data, 'user config', cfg);
 };
