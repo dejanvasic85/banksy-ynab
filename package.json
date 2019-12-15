@@ -5,6 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "start": "sls invoke local -f ynab -p sample-event.json",
+    "deploy": "sls deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
