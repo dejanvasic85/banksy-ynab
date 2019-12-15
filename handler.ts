@@ -8,6 +8,7 @@ const AUD_BASE = 1000;
 
 export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Promise<void> => {
   const data: TransactionsMessage = JSON.parse(event.Records[0].Sns.Message);
+  console.log('YNAB Handler: Received message', data);
   const userSecret = await getSecret(data.username);
   const cfg: UserConfig = JSON.parse(userSecret);
 
