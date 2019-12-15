@@ -18,6 +18,12 @@ provider:
   region: ap-southeast-2
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: 
+        - '*'
 
 functions:
   ynab:
