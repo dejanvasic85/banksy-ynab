@@ -11,12 +11,11 @@ export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Prom
   console.log('YNAB Handler: Received message', data);
   const userSecret = await getSecret(data.username);
   const cfg: UserConfig = JSON.parse(userSecret);
+  const bank = cfg.banks.find(b => b.bankId === data.bankId);
+  const account = bank.accounts.find(a => a.accountName === data.accountName);
 
   const budget = new Budget(cfg.ynabKey);
   await budget.loadBudget(cfg.ynabBudgetId);
-
-  const bank = cfg.banks.find(b => b.bankId === data.bankId);
-  const account = bank.accounts.find(a => a.accountName === data.accountName);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
   for (const { amount, description } of data.transactions) {
