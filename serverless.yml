@@ -27,6 +27,6 @@ provider:
 
 functions:
   ynab:
-    handler: handler.ynab
+    handler: src/handler.ynab
     events:
       - sns: ${self:custom.bankTransactionSnsArn}

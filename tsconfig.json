@@ -7,7 +7,8 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceRoot": "./src"
   },
   "include": ["./**/*.ts"],
   "exclude": [

@@ -1,14 +1,12 @@
-import { SNSHandler, SNSEvent, Context } from 'aws-lambda';
-import 'source-map-support/register';
 import { TransactionsMessage, UserConfig } from './types';
 import { getSecret } from './secretFetcher';
 import { Budget } from './budget';
 
 const AUD_BASE = 1000;
 
-export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Promise<void> => {
-  const data: TransactionsMessage = JSON.parse(event.Records[0].Sns.Message);
+export const processTransactions = async (data: TransactionsMessage): Promise<void> => {
   console.log('YNAB Handler: Received message', data);
+
   const userSecret = await getSecret(data.username);
   const cfg: UserConfig = JSON.parse(userSecret);
   const bank = cfg.banks.find(b => b.bankId === data.bankId);
