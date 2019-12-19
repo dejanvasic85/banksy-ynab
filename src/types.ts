@@ -10,9 +10,15 @@ export interface TransactionsMessage {
   transactions: BankTransaction[];
 }
 
+export enum TransactionType {
+  Credit = "credit",
+  Debit = "debit"
+}
+
 export interface BankAccount {
   accountName: string;
   ynabAccountName: string;
+  transactionTypes?: TransactionType;
 }
 
 export interface Bank {
