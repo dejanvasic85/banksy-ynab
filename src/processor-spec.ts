@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import { shouldCreateTransaction, processTransactions } from './processor';
-import { BankAccount, TransactionType, TransactionsMessage, BankTransaction } from './types';
+import { BankAccount, TransactionsMessage, BankTransaction } from './types';
 import * as secretFetcher from './secretFetcher';
 import * as budget from './budget';
 
@@ -76,7 +76,7 @@ describe('processor', () => {
       // Assert
       expect(loadBudgetStub.calledWith('budget321')).to.equal(true);
       expect(addTransactionStub.getCalls().length).to.equal(1);
-      
+
       expect(addTransactionStub.getCall(0).args[0]).to.contain({
         memo: 'mcdonalds',
         amount: -80000,
@@ -95,7 +95,7 @@ describe('processor', () => {
       {
         account: {
           ...bankAccount,
-          transactionTypes: TransactionType.Credit,
+          transactionTypes: 'credit',
         },
         amount: 0,
         expected: false,
@@ -103,7 +103,7 @@ describe('processor', () => {
       {
         account: {
           ...bankAccount,
-          transactionTypes: TransactionType.Credit,
+          transactionTypes: 'credit',
         },
         amount: -10,
         expected: false,
@@ -111,7 +111,7 @@ describe('processor', () => {
       {
         account: {
           ...bankAccount,
-          transactionTypes: TransactionType.Credit,
+          transactionTypes: 'credit',
         },
         amount: 10,
         expected: true,
@@ -119,7 +119,7 @@ describe('processor', () => {
       {
         account: {
           ...bankAccount,
-          transactionTypes: TransactionType.Debit,
+          transactionTypes: 'debit',
         },
         amount: -5,
         expected: true,
@@ -127,7 +127,7 @@ describe('processor', () => {
       {
         account: {
           ...bankAccount,
-          transactionTypes: TransactionType.Debit,
+          transactionTypes: 'debit',
         },
         amount: 5,
         expected: false,

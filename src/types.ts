@@ -11,8 +11,8 @@ export interface TransactionsMessage {
 }
 
 export enum TransactionType {
-  Credit = "credit",
-  Debit = "debit"
+  Credit = 'credit',
+  Debit = 'debit',
 }
 
 export interface BankAccount {
