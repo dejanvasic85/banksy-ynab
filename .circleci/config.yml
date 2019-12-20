@@ -22,3 +22,9 @@ jobs:
       - run:
           name: test
           command: npm test
+
+      - run:
+          name: deploy
+          command: npm run deploy
+          branches:
+            only: master
