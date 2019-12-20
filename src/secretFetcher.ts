@@ -1,4 +1,5 @@
 import { SecretsManager } from 'aws-sdk';
+import { UserConfig } from './types';
 
 const client = new SecretsManager({
   region: 'ap-southeast-2',
@@ -14,3 +15,9 @@ export const getSecret = async (secretName: string): Promise<string> => {
     return null;
   }
 };
+
+export const getUserConfigSecret = async (username: string) : Promise<UserConfig> => {
+  const data = await getSecret(username);
+  const userConfig : UserConfig = JSON.parse(data);
+  return userConfig;
+}

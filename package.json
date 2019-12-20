@@ -6,7 +6,8 @@
   "scripts": {
     "start": "sls invoke local -f ynab -p sample-event.json",
     "deploy": "sls deploy",
-    "test": "mocha -r ts-node/register './src/**/*spec.ts'"
+    "test": "mocha -r ts-node/register './src/**/*spec.ts'",
+    "test:single": "mocha -r ts-node/register ./src/**/$test*spec.ts --watch-extensions ts --w"
   },
   "dependencies": {
     "aws-sdk": "^2.590.0",

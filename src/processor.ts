@@ -1,5 +1,6 @@
-import { TransactionsMessage, UserConfig, TransactionType, BankAccount } from './types';
-import { getSecret } from './secretFetcher';
+import logger from './logger';
+import { TransactionsMessage, TransactionType, BankAccount } from './types';
+import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
 
 const AUD_BASE = 1000;
@@ -21,15 +22,14 @@ export const shouldCreateTransaction = (account: BankAccount, amount: number): b
 };
 
 export const processTransactions = async (data: TransactionsMessage): Promise<void> => {
-  console.log('YNAB Handler: Received message', data);
+  logger.info('YNAB Handler: Received message', data);
 
-  const userSecret = await getSecret(data.username);
-  const cfg: UserConfig = JSON.parse(userSecret);
-  const bank = cfg.banks.find(b => b.bankId === data.bankId);
+  const { banks, ynabBudgetId, ynabKey } = await getUserConfigSecret(data.username);
+  const bank = banks.find(b => b.bankId === data.bankId);
   const account = bank.accounts.find(a => a.accountName === data.accountName);
 
-  const budget = new Budget(cfg.ynabKey);
-  await budget.loadBudget(cfg.ynabBudgetId);
+  const budget = new Budget(ynabKey);
+  await budget.loadBudget(ynabBudgetId);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
   for (const { amount, description } of data.transactions) {
