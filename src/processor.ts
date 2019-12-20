@@ -37,6 +37,7 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
     const baseAmount = amount * AUD_BASE;
 
     if (!shouldCreateTransaction(account, amount)) {
+      logger.info(`Account is flagged for ${account.transactionTypes} transactions only. Skipping transaction.`);
       continue;
     }
 
