@@ -2,7 +2,6 @@ import logger from './logger';
 import { TransactionsMessage, TransactionType, BankAccount } from './types';
 import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
-import * as moment from 'moment';
 
 const AUD_BASE = 1000;
 
@@ -21,10 +20,6 @@ export const shouldCreateTransaction = (account: BankAccount, amount: number): b
 
   return false;
 };
-
-export const parseDate = (text: string) : string => {
-  return moment(text).format('YYYY-MM-DD');
-}
 
 export const processTransactions = async (data: TransactionsMessage): Promise<void> => {
   logger.info('YNAB Handler: Received message', data);
@@ -46,7 +41,7 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
     }
 
     await budget.addTransaction({
-      date: parseDate(date),
+      date,
       memo: description,
       amount: baseAmount,
       accountId,
