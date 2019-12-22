@@ -32,8 +32,7 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
   await budget.loadBudget(ynabBudgetId);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
-  for (const { amount, description } of data.transactions) {
-    const today = new Date().toISOString();
+  for (const { amount, date, description } of data.transactions) {
     const baseAmount = amount * AUD_BASE;
 
     if (!shouldCreateTransaction(account, amount)) {
@@ -42,7 +41,7 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
     }
 
     await budget.addTransaction({
-      date: today,
+      date,
       memo: description,
       amount: baseAmount,
       accountId,

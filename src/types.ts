@@ -1,5 +1,6 @@
 export interface BankTransaction {
   amount: number;
+  date: string;
   description: string;
 }
 

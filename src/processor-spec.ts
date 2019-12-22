@@ -60,6 +60,7 @@ describe('processor', () => {
       const transactions: BankTransaction[] = [
         {
           amount: -80,
+          date: (new Date()).toISOString(),
           description: 'mcdonalds',
         },
       ];
