@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
-import { shouldCreateTransaction, processTransactions } from './processor';
+import { shouldCreateTransaction, processTransactions, parseDate } from './processor';
 import { BankAccount, TransactionsMessage, BankTransaction } from './types';
 import * as secretFetcher from './secretFetcher';
 import * as budget from './budget';
@@ -60,7 +60,7 @@ describe('processor', () => {
       const transactions: BankTransaction[] = [
         {
           amount: -80,
-          date: (new Date()).toISOString(),
+          date: '2019-12-21T13:00:00.000Z',
           description: 'mcdonalds',
         },
       ];
@@ -81,6 +81,7 @@ describe('processor', () => {
       expect(addTransactionStub.getCall(0).args[0]).to.contain({
         memo: 'mcdonalds',
         amount: -80000,
+        date: '2019-12-22',
         accountId: 'ynab-account-id-123',
       });
     });
@@ -150,5 +151,9 @@ describe('processor', () => {
         expect(shouldCreateTransaction(account, amount)).to.equal(expected);
       });
     });
+  });
+
+  describe('parseDate', () => {
+    expect(parseDate('2019-12-21T13:00:00.000Z')).to.equal('2019-12-22');
   });
 });
