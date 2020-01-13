@@ -43,8 +43,8 @@ workflows:
   test_and_deploy:
     jobs:
       - test
-      - deploy
-        requires: 
-          - test
-        branches:
-          only: master
+      - deploy:
+          requires: 
+            - test
+          branches:
+            only: master
