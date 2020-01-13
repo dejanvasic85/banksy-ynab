@@ -1,4 +1,5 @@
 import * as ynab from 'ynab';
+import * as moment from 'moment';
 import { BudgetAccount, BudgetTransaction } from './types';
 
 class Budget {
@@ -15,9 +16,9 @@ class Budget {
   }
 
   getAccounts(): BudgetAccount[] {
-    return this.budget.accounts.map(a => ({
-      accountId: a.id,
-      accountName: a.name,
+    return this.budget.accounts.map(({ id, name }) => ({
+      accountId: id,
+      accountName: name,
     }));
   }
 
@@ -35,6 +36,22 @@ class Budget {
     };
 
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
+  }
+
+  async getTransactionsForAccount(accountId: string): Promise<BudgetTransaction[]> {
+    const sinceDate = moment()
+      .subtract(5, 'days')
+      .toISOString();
+
+    const results = await this.api.transactions.getTransactionsByAccount(this.budget.id, accountId, sinceDate);
+    const data = results.data.transactions.map(({ date, amount, memo }) => ({
+      date,
+      amount,
+      memo,
+      accountId,
+    }));
+
+    return data;
   }
 }
 

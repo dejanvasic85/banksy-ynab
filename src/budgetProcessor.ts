@@ -17,7 +17,11 @@ export const processBudgetMessage = async (data: TransactionsMessage): Promise<v
   await budget.loadBudget(ynabBudgetId);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
-  const transactionMap: TransactionMap = data.transactions.reduce(toTransactionMap(account, []), initialTransactionMap);
+  const existingBudgetTransactions = await budget.getTransactionsForAccount(accountId);
+  const transactionMap: TransactionMap = data.transactions.reduce(
+    toTransactionMap(account, existingBudgetTransactions),
+    initialTransactionMap,
+  );
 
   for (const { amount, date, description } of transactionMap.transactions) {
     const baseAmount = amount * AUD_BASE;

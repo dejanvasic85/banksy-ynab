@@ -13,6 +13,22 @@ describe('budgetProcessor', () => {
     let getAccountsStub;
     let addTransactionStub;
     let loggerInfoStub;
+
+    const transactions: BankTransaction[] = [
+      {
+        amount: -80,
+        date: '2020-01-13T20:41:09.685Z',
+        description: 'mcdonalds',
+      },
+    ];
+
+    const data: TransactionsMessage = {
+      bankId: 'cba',
+      accountName: 'savings',
+      username: 'joe',
+      transactions,
+    };
+
     before(() => {
       getUserConfigSecretStub = stub(secretFetcher, 'getUserConfigSecret');
       loadBudgetStub = stub(budget.Budget.prototype, 'loadBudget');
@@ -38,21 +54,6 @@ describe('budgetProcessor', () => {
     });
 
     it('should post messages to YNAB', async () => {
-      const transactions: BankTransaction[] = [
-        {
-          amount: -80,
-          date: new Date().toISOString(),
-          description: 'mcdonalds',
-        },
-      ];
-
-      const data: TransactionsMessage = {
-        bankId: 'cba',
-        accountName: 'savings',
-        username: 'joe',
-        transactions,
-      };
-
       getUserConfigSecretStub.resolves({
         ynabKey: 'key-12',
         ynabBudgetId: 'budget321',
@@ -82,11 +83,14 @@ describe('budgetProcessor', () => {
       expect(loadBudgetStub.calledWith('budget321')).to.equal(true);
       expect(addTransactionStub.getCalls().length).to.equal(1);
 
-      expect(addTransactionStub.getCall(0).args[0]).to.contain({
-        memo: 'mcdonalds',
-        amount: -80000,
-        accountId: 'ynab-account-id-123',
-      });
+      expect(addTransactionStub.getCall(0).args).to.eql([
+        {
+          memo: 'mcdonalds',
+          amount: -80000,
+          accountId: 'ynab-account-id-123',
+          date: '2020-01-13T20:41:09.685Z',
+        },
+      ]);
     });
   });
 });
