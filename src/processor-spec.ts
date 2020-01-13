@@ -1,9 +1,11 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
-import { shouldCreateTransaction, processTransactions } from './processor';
-import { BankAccount, TransactionsMessage, BankTransaction } from './types';
+import { processTransactions } from './processor';
+import { TransactionsMessage, BankTransaction } from './types';
+import logger from './logger';
 import * as secretFetcher from './secretFetcher';
 import * as budget from './budget';
+import * as filters from './transactionFilters';
 
 describe('processor', () => {
   describe('processTransactions', () => {
@@ -11,12 +13,16 @@ describe('processor', () => {
     let loadBudgetStub;
     let getAccountsStub;
     let addTransactionStub;
+    let filterTransactionTypesStub;
+    let loggerInfoStub;
 
     before(() => {
       getUserConfigSecretStub = stub(secretFetcher, 'getUserConfigSecret');
       loadBudgetStub = stub(budget.Budget.prototype, 'loadBudget');
       getAccountsStub = stub(budget.Budget.prototype, 'getAccounts');
       addTransactionStub = stub(budget.Budget.prototype, 'addTransaction');
+      filterTransactionTypesStub = stub(filters, 'filterTransactionTypes');
+      loggerInfoStub = stub(logger, 'info');
     });
 
     beforeEach(() => {
@@ -24,6 +30,8 @@ describe('processor', () => {
       loadBudgetStub.resetHistory();
       getAccountsStub.resetHistory();
       addTransactionStub.resetHistory();
+      filterTransactionTypesStub.resetHistory();
+      loggerInfoStub.resetHistory();
     });
 
     after(() => {
@@ -31,6 +39,8 @@ describe('processor', () => {
       loadBudgetStub.restore();
       getAccountsStub.restore();
       addTransactionStub.restore();
+      filterTransactionTypesStub.restore();
+      loggerInfoStub.restore();
     });
 
     it('should post messages to YNAB', async () => {
@@ -60,7 +70,7 @@ describe('processor', () => {
       const transactions: BankTransaction[] = [
         {
           amount: -80,
-          date: (new Date()).toISOString(),
+          date: new Date().toISOString(),
           description: 'mcdonalds',
         },
       ];
@@ -82,72 +92,6 @@ describe('processor', () => {
         memo: 'mcdonalds',
         amount: -80000,
         accountId: 'ynab-account-id-123',
-      });
-    });
-  });
-
-  describe('shouldCreateTransaction', () => {
-    const bankAccount: BankAccount = {
-      accountName: 'test-only',
-      ynabAccountName: 'test-only',
-    };
-
-    const scenarios: any = [
-      {
-        account: {
-          ...bankAccount,
-          transactionTypes: 'credit',
-        },
-        amount: 0,
-        expected: false,
-      },
-      {
-        account: {
-          ...bankAccount,
-          transactionTypes: 'credit',
-        },
-        amount: -10,
-        expected: false,
-      },
-      {
-        account: {
-          ...bankAccount,
-          transactionTypes: 'credit',
-        },
-        amount: 10,
-        expected: true,
-      },
-      {
-        account: {
-          ...bankAccount,
-          transactionTypes: 'debit',
-        },
-        amount: -5,
-        expected: true,
-      },
-      {
-        account: {
-          ...bankAccount,
-          transactionTypes: 'debit',
-        },
-        amount: 5,
-        expected: false,
-      },
-      {
-        account: bankAccount,
-        amount: 5,
-        expected: true,
-      },
-      {
-        account: bankAccount,
-        amount: -5,
-        expected: true,
-      },
-    ];
-
-    scenarios.forEach(({ expected, account, amount }) => {
-      it(`should be ${expected} when amount is ${amount} for ${account.transactionTypes} account type`, () => {
-        expect(shouldCreateTransaction(account, amount)).to.equal(expected);
       });
     });
   });

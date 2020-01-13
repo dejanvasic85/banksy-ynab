@@ -1,25 +1,10 @@
 import logger from './logger';
-import { TransactionsMessage, TransactionType, BankAccount } from './types';
+import { TransactionsMessage } from './types';
 import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
+//import { filterTransactionTypes } from './transactionFilters';
 
 const AUD_BASE = 1000;
-
-export const shouldCreateTransaction = (account: BankAccount, amount: number): boolean => {
-  if (!account.transactionTypes) {
-    return true;
-  }
-
-  if (amount > 0 && account.transactionTypes === TransactionType.Credit) {
-    return true;
-  }
-
-  if (amount < 0 && account.transactionTypes === TransactionType.Debit) {
-    return true;
-  }
-
-  return false;
-};
 
 export const processTransactions = async (data: TransactionsMessage): Promise<void> => {
   logger.info('YNAB Handler: Received message', data);
@@ -35,10 +20,10 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
   for (const { amount, date, description } of data.transactions) {
     const baseAmount = amount * AUD_BASE;
 
-    if (!shouldCreateTransaction(account, amount)) {
-      logger.info(`Account is flagged for ${account.transactionTypes} transactions only. Skipping transaction.`);
-      continue;
-    }
+    // if (!filterTransactionTypes(account, amount)) {
+    //   logger.info(`Account is flagged for ${account.transactionTypes} transactions only. Skipping transaction.`);
+    //   continue;
+    // }
 
     await budget.addTransaction({
       date,

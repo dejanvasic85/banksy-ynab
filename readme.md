@@ -10,10 +10,8 @@
 | ------------ | ------------------ | --------: |
 | username     | string             |    johnny |
 | bankId       | string             |       cba |
-| accountName  | string ` | Savings |
+| accountName  | string             |   Savings |
 | transactions | BankTransactions[] | see below |
-
-
 
 ### Bank Transaction:
 
@@ -26,3 +24,7 @@
 Amount field is converted automatically to cents as 100 base points, so -20 will be posted as -20000 to YNAB.
 
 The date field is simply a string and is directly forwarded to YNAB. It should contain the local date including the timezone.
+
+## Secrets
+
+Each user will have their configuration that includes YNAB api key and account details in a JSON stored AWS Secret. 
