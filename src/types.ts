@@ -45,3 +45,10 @@ export interface BudgetAccount {
   accountName: string;
   accountId: string;
 }
+
+export interface TransactionMap {
+  ignoredCreditTransactions: BankTransaction[],
+  ignoredDebitTransactions: BankTransaction[],
+  ignoredPossibleDuplicates: BankTransaction[],
+  transactions: BankTransaction[]
+}

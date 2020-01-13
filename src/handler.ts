@@ -1,7 +1,7 @@
 import { SNSHandler, SNSEvent, Context } from 'aws-lambda';
 import 'source-map-support/register';
 import { TransactionsMessage } from './types';
-import { processTransactions } from './processor';
+import { processBudgetMessage } from './budgetProcessor';
 
 export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Promise<void> => {
   if (!event.Records) {
@@ -9,5 +9,5 @@ export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Prom
   }
 
   const data: TransactionsMessage = JSON.parse(event.Records[0].Sns.Message);
-  await processTransactions(data);
+  await processBudgetMessage(data);
 };

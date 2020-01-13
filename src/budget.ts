@@ -34,7 +34,6 @@ class Budget {
       category_id: null,
     };
 
-    console.log('Creating YNAB Transaction budget:', this.budget.id, 'Transaction:', transaction);
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
   }
 }

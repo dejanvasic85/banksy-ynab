@@ -1,12 +1,12 @@
 import logger from './logger';
-import { TransactionsMessage } from './types';
+import { TransactionsMessage, TransactionMap } from './types';
 import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
-//import { filterTransactionTypes } from './transactionFilters';
+import { toTransactionMap, initialTransactionMap } from './transactionReducer';
 
 const AUD_BASE = 1000;
 
-export const processTransactions = async (data: TransactionsMessage): Promise<void> => {
+export const processBudgetMessage = async (data: TransactionsMessage): Promise<void> => {
   logger.info('YNAB Handler: Received message', data);
 
   const { banks, ynabBudgetId, ynabKey } = await getUserConfigSecret(data.username);
@@ -17,13 +17,10 @@ export const processTransactions = async (data: TransactionsMessage): Promise<vo
   await budget.loadBudget(ynabBudgetId);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
-  for (const { amount, date, description } of data.transactions) {
-    const baseAmount = amount * AUD_BASE;
+  const transactionMap: TransactionMap = data.transactions.reduce(toTransactionMap(account, []), initialTransactionMap);
 
-    // if (!filterTransactionTypes(account, amount)) {
-    //   logger.info(`Account is flagged for ${account.transactionTypes} transactions only. Skipping transaction.`);
-    //   continue;
-    // }
+  for (const { amount, date, description } of transactionMap.transactions) {
+    const baseAmount = amount * AUD_BASE;
 
     await budget.addTransaction({
       date,

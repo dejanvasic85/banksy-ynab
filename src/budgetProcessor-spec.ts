@@ -1,27 +1,23 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
-import { processTransactions } from './processor';
+import { processBudgetMessage } from './budgetProcessor';
 import { TransactionsMessage, BankTransaction } from './types';
 import logger from './logger';
 import * as secretFetcher from './secretFetcher';
 import * as budget from './budget';
-import * as filters from './transactionFilters';
 
-describe('processor', () => {
-  describe('processTransactions', () => {
+describe('budgetProcessor', () => {
+  describe('processBudgetMessage', () => {
     let getUserConfigSecretStub;
     let loadBudgetStub;
     let getAccountsStub;
     let addTransactionStub;
-    let filterTransactionTypesStub;
     let loggerInfoStub;
-
     before(() => {
       getUserConfigSecretStub = stub(secretFetcher, 'getUserConfigSecret');
       loadBudgetStub = stub(budget.Budget.prototype, 'loadBudget');
       getAccountsStub = stub(budget.Budget.prototype, 'getAccounts');
       addTransactionStub = stub(budget.Budget.prototype, 'addTransaction');
-      filterTransactionTypesStub = stub(filters, 'filterTransactionTypes');
       loggerInfoStub = stub(logger, 'info');
     });
 
@@ -30,7 +26,6 @@ describe('processor', () => {
       loadBudgetStub.resetHistory();
       getAccountsStub.resetHistory();
       addTransactionStub.resetHistory();
-      filterTransactionTypesStub.resetHistory();
       loggerInfoStub.resetHistory();
     });
 
@@ -39,11 +34,25 @@ describe('processor', () => {
       loadBudgetStub.restore();
       getAccountsStub.restore();
       addTransactionStub.restore();
-      filterTransactionTypesStub.restore();
       loggerInfoStub.restore();
     });
 
     it('should post messages to YNAB', async () => {
+      const transactions: BankTransaction[] = [
+        {
+          amount: -80,
+          date: new Date().toISOString(),
+          description: 'mcdonalds',
+        },
+      ];
+
+      const data: TransactionsMessage = {
+        bankId: 'cba',
+        accountName: 'savings',
+        username: 'joe',
+        transactions,
+      };
+
       getUserConfigSecretStub.resolves({
         ynabKey: 'key-12',
         ynabBudgetId: 'budget321',
@@ -67,22 +76,7 @@ describe('processor', () => {
         },
       ]);
 
-      const transactions: BankTransaction[] = [
-        {
-          amount: -80,
-          date: new Date().toISOString(),
-          description: 'mcdonalds',
-        },
-      ];
-
-      const data: TransactionsMessage = {
-        bankId: 'cba',
-        accountName: 'savings',
-        username: 'joe',
-        transactions,
-      };
-
-      await processTransactions(data);
+      await processBudgetMessage(data);
 
       // Assert
       expect(loadBudgetStub.calledWith('budget321')).to.equal(true);
