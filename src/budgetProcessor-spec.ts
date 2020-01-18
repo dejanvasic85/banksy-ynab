@@ -13,6 +13,7 @@ describe('budgetProcessor', () => {
     let getAccountsStub;
     let addTransactionStub;
     let loggerInfoStub;
+    let getTransactionsForAccountStub;
 
     const transactions: BankTransaction[] = [
       {
@@ -34,6 +35,7 @@ describe('budgetProcessor', () => {
       loadBudgetStub = stub(budget.Budget.prototype, 'loadBudget');
       getAccountsStub = stub(budget.Budget.prototype, 'getAccounts');
       addTransactionStub = stub(budget.Budget.prototype, 'addTransaction');
+      getTransactionsForAccountStub = stub(budget.Budget.prototype, 'getTransactionsForAccount');
       loggerInfoStub = stub(logger, 'info');
     });
 
@@ -43,6 +45,7 @@ describe('budgetProcessor', () => {
       getAccountsStub.resetHistory();
       addTransactionStub.resetHistory();
       loggerInfoStub.resetHistory();
+      getTransactionsForAccountStub.resetHistory();
     });
 
     after(() => {
@@ -51,6 +54,7 @@ describe('budgetProcessor', () => {
       getAccountsStub.restore();
       addTransactionStub.restore();
       loggerInfoStub.restore();
+      getTransactionsForAccountStub.restore();
     });
 
     it('should post messages to YNAB', async () => {
@@ -77,12 +81,13 @@ describe('budgetProcessor', () => {
         },
       ]);
 
+      getTransactionsForAccountStub.resolves([])
+
       await processBudgetMessage(data);
 
       // Assert
       expect(loadBudgetStub.calledWith('budget321')).to.equal(true);
       expect(addTransactionStub.getCalls().length).to.equal(1);
-
       expect(addTransactionStub.getCall(0).args).to.eql([
         {
           memo: 'mcdonalds',

@@ -7,7 +7,24 @@ export const initialTransactionMap: TransactionMap = {
   transactions: [],
 };
 
-export const toTransactionMap = (account: BankAccount, _: BudgetTransaction[]): any => {
+export const isMemoSimilar = (firstMemo: string, secondMemo: string): boolean => {
+  if (!firstMemo && !secondMemo) {
+    return true;
+  }
+console.log('firstMemo', firstMemo, secondMemo);
+  return (
+    (firstMemo || '')
+      .toLowerCase()
+      .replace(/pending - /, '')
+      .trim() ===
+    (secondMemo || '')
+      .toLowerCase()
+      .replace(/pending - /, '')
+      .trim()
+  );
+};
+
+export const toTransactionMap = (account: BankAccount, budgetTransactions: BudgetTransaction[]): any => {
   return (acc: TransactionMap, txn: BankTransaction): TransactionMap => {
     if (account.transactionTypes === TransactionType.Debit && txn.amount > 0) {
       // This bank account only cares for negative transactions, so ignore the positive
@@ -22,6 +39,13 @@ export const toTransactionMap = (account: BankAccount, _: BudgetTransaction[]): 
       return {
         ...acc,
         ignoredDebitTransactions: [...acc.ignoredDebitTransactions, txn],
+      };
+    }
+
+    if (budgetTransactions.some(({ amount, memo }) => amount === txn.amount && isMemoSimilar(memo, txn.description))) {
+      return {
+        ...acc,
+        ignoredPossibleDuplicates: [...acc.ignoredPossibleDuplicates, txn],
       };
     }
 

@@ -1,21 +1,35 @@
 import { expect } from 'chai';
+import * as moment from 'moment';
 
 import { toTransactionMap, initialTransactionMap } from './transactionReducer';
 import { TransactionMap, TransactionType } from './types';
 
 describe('toTransactionMap', () => {
+  const today = moment()
+    .startOf('day')
+    .toISOString();
+  const yesterday = moment()
+    .subtract(1, 'days')
+    .toISOString();
+  const twoDaysAgo = moment()
+    .subtract(2, 'days')
+    .toISOString();
+
   const transactions: any = [
     {
       amount: -100,
       description: 'mcdonalds',
+      date: today,
     },
     {
       amount: -900,
       description: 'ebay',
+      date: yesterday,
     },
     {
       amount: 200,
-      description: 'rental income',
+      description: 'PENDING - BARRY PLANT RENT INCOME',
+      date: twoDaysAgo,
     },
   ];
 
@@ -29,7 +43,10 @@ describe('toTransactionMap', () => {
       const budgetTransactions: any[] = [];
 
       // Action
-      const result: TransactionMap = transactions.reduce(toTransactionMap(bankAccount, budgetTransactions), initialTransactionMap);
+      const result: TransactionMap = transactions.reduce(
+        toTransactionMap(bankAccount, budgetTransactions),
+        initialTransactionMap,
+      );
 
       // Assert
       expect(result.ignoredDebitTransactions).to.have.lengthOf(0);
@@ -38,16 +55,19 @@ describe('toTransactionMap', () => {
         {
           amount: -100,
           description: 'mcdonalds',
+          date: today,
         },
         {
           amount: -900,
           description: 'ebay',
+          date: yesterday,
         },
       ]);
       expect(result.ignoredCreditTransactions).to.eql([
         {
           amount: 200,
-          description: 'rental income',
+          description: 'PENDING - BARRY PLANT RENT INCOME',
+          date: twoDaysAgo,
         },
       ]);
     });
@@ -63,7 +83,10 @@ describe('toTransactionMap', () => {
       const budgetTransactions: any[] = [];
 
       // Action
-      const result: TransactionMap = transactions.reduce(toTransactionMap(bankAccount, budgetTransactions), initialTransactionMap);
+      const result: TransactionMap = transactions.reduce(
+        toTransactionMap(bankAccount, budgetTransactions),
+        initialTransactionMap,
+      );
 
       // Assert
       expect(result.ignoredPossibleDuplicates).to.have.lengthOf(0);
@@ -72,16 +95,64 @@ describe('toTransactionMap', () => {
         {
           amount: -100,
           description: 'mcdonalds',
+          date: today,
         },
         {
           amount: -900,
           description: 'ebay',
+          date: yesterday,
         },
       ]);
       expect(result.transactions).to.eql([
         {
           amount: 200,
-          description: 'rental income',
+          description: 'PENDING - BARRY PLANT RENT INCOME',
+          date: twoDaysAgo,
+        },
+      ]);
+    });
+  });
+
+  describe('when the budget transactions match on the amount and description', () => {
+    it('should ignore possible duplicates', () => {
+      const bankAccount: any = {
+        accountName: 'Transaction Account',
+      };
+
+      const budgetTransactions: any[] = [
+        {
+          amount: 200,
+          memo: 'Barry Plant Rent Income',
+          date: today,
+        },
+      ];
+
+      // Action
+      const result: TransactionMap = transactions.reduce(
+        toTransactionMap(bankAccount, budgetTransactions),
+        initialTransactionMap,
+      );
+
+      // Assert
+      expect(result.ignoredDebitTransactions).to.have.lengthOf(0);
+      expect(result.ignoredCreditTransactions).to.have.lengthOf(0);
+      expect(result.ignoredPossibleDuplicates).to.eql([
+        {
+          amount: 200,
+          description: 'PENDING - BARRY PLANT RENT INCOME',
+          date: twoDaysAgo,
+        },
+      ]);
+      expect(result.transactions).to.eql([
+        {
+          amount: -100,
+          description: 'mcdonalds',
+          date: today,
+        },
+        {
+          amount: -900,
+          description: 'ebay',
+          date: yesterday,
         },
       ]);
     });
