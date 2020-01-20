@@ -18,6 +18,7 @@ provider:
   region: ap-southeast-2
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    SENDGRID_API_KEY: ${env:SENDGRID_API_KEY}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

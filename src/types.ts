@@ -1,3 +1,7 @@
+export interface Config {
+  sendgridKey: string;
+}
+
 export interface BankTransaction {
   amount: number;
   date: string;
@@ -47,8 +51,8 @@ export interface BudgetAccount {
 }
 
 export interface TransactionMap {
-  ignoredCreditTransactions: BankTransaction[],
-  ignoredDebitTransactions: BankTransaction[],
-  ignoredPossibleDuplicates: BankTransaction[],
-  transactions: BankTransaction[]
+  ignoredCreditTransactions: BankTransaction[];
+  ignoredDebitTransactions: BankTransaction[];
+  ignoredPossibleDuplicates: BankTransaction[];
+  transactions: BankTransaction[];
 }
