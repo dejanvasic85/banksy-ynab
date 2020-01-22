@@ -1,11 +1,56 @@
 import { expect } from 'chai';
-import { stub } from 'sinon';
+import { createSandbox, stub } from 'sinon';
 import * as sendGrid from '@sendgrid/mail';
 import { sendEmail } from './mailer';
-
+import { config } from './config';
 
 describe('mailer', () => {
-  it('sends structured html mail with new and duplicated transactions', () => {
+  let setApiKeyStub;
+  let sendStub;
+  let sandbox;
 
+  before(() => {
+    setApiKeyStub = stub(sendGrid, 'setApiKey');
+    sendStub = stub(sendGrid, 'send');
+
+    sandbox = createSandbox();
+    sandbox.stub(config, 'sendgridKey').value('sendgrid-1234');
+  });
+
+  beforeEach(() => {
+    setApiKeyStub.resetHistory();
+    sendStub.resetHistory();
+  });
+
+  after(() => {
+    setApiKeyStub.restore();
+    sendStub.restore();
+    sandbox.restore();
+  });
+
+  it('sends structured html mail with new and duplicated transactions', async () => {
+    const recipient = 'test@email.com';
+    const username = 'cool person';
+    const saved = [];
+    const possibleDuplicates = [
+      {
+        amount: 10,
+        date: '10/02/2019',
+        description: 'McDonalds',
+      },
+    ];
+
+    await sendEmail(recipient, username, saved, possibleDuplicates);
+
+    expect(sendStub.getCall(0).args).to.eql([
+      {
+        to: 'test@email.com',
+        from: 'ynab@banksy.com',
+        subject: 'YNAB Transactions',
+        html: `
+    <h3>Banksy Transactions</h3>\n    <p>Hey: cool person, your bank has reported some new transactions:</p>\n  \n      <h4>Possible Duplicates</h4>\n      <ul>\n    10 McDonalds 10/02/2019</ul>`,
+      },
+      false,
+    ]);
   });
 });

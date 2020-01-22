@@ -1,5 +1,5 @@
 import { config } from './config';
-import { BankTransaction, UserConfig } from './types';
+import { BankTransaction } from './types';
 import { setApiKey, send } from '@sendgrid/mail';
 
 setApiKey(config.sendgridKey);
@@ -26,7 +26,17 @@ export const sendEmail = async (
     `;
 
     email += toList(savedTransactions);
-    email += `</ul>`
+    email += `</ul>`;
+  }
+
+  if (possibleDuplicateTransactions.length > 0) {
+    email += `
+      <h4>Possible Duplicates</h4>
+      <ul>
+    `;
+
+    email += toList(possibleDuplicateTransactions);
+    email += `</ul>`;
   }
 
   await send(

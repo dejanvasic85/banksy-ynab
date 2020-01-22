@@ -11,7 +11,7 @@ export const isMemoSimilar = (firstMemo: string, secondMemo: string): boolean =>
   if (!firstMemo && !secondMemo) {
     return true;
   }
-console.log('firstMemo', firstMemo, secondMemo);
+
   return (
     (firstMemo || '')
       .toLowerCase()

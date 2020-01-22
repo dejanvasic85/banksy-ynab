@@ -33,6 +33,7 @@ export interface Bank {
 }
 
 export interface UserConfig {
+  email: string;
   ynabKey: string;
   ynabBudgetId: string;
   banks: Bank[];
