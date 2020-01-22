@@ -15,7 +15,7 @@
     "ynab": "^1.17.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.39",
+    "@types/aws-lambda": "8.10.40",
     "@types/chai": "4.2.7",
     "@types/mocha": "5.2.7",
     "@types/node": "10.17.13",
