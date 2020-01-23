@@ -6,6 +6,8 @@
   "scripts": {
     "start": "sls invoke local -f ynab -p sample-event.json",
     "deploy": "sls deploy",
+    "deploy:dev": "sls deploy --stage dev",
+    "destroy:dev": "sls remove --stage dev",
     "test": "mocha -r ts-node/register './src/**/*spec.ts'",
     "test:watch": "mocha -r ts-node/register './src/**/*spec.ts' -w",
     "test:single": "mocha -r ts-node/register ./src/**/$test*spec.ts --watch-extensions ts --w",
