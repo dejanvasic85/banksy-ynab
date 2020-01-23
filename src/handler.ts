@@ -1,13 +1,17 @@
-import { SNSHandler, SNSEvent, Context } from 'aws-lambda';
 import 'source-map-support/register';
-import { TransactionsMessage } from './types';
+import { Context, SQSEvent, SQSHandler } from 'aws-lambda';
+import { TransactionsMessage, SqsMessage } from './types';
 import { processBudgetMessage } from './budgetProcessor';
+import logger from './logger';
 
-export const ynab: SNSHandler = async (event: SNSEvent, _context: Context): Promise<void> => {
-  if (!event.Records) {
-    throw new Error(`Event records are empty. Unable to process SNS message. ${event}`);
+export const ynab: SQSHandler = async (event: SQSEvent, _context: Context): Promise<void> => {
+  try {
+    const [{ body }] = event.Records;
+    const { Message }: SqsMessage = JSON.parse(body);
+    const data: TransactionsMessage = JSON.parse(Message);
+    await processBudgetMessage(data);
+  } catch (err) {
+    logger.error('Something bad happened', err);
+    throw err;
   }
-
-  const data: TransactionsMessage = JSON.parse(event.Records[0].Sns.Message);
-  await processBudgetMessage(data);
 };

@@ -2,6 +2,10 @@ export interface Config {
   sendgridKey: string;
 }
 
+export interface SqsMessage {
+  Message: string 
+}
+
 export interface BankTransaction {
   amount: number;
   date: string;
