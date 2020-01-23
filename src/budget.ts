@@ -36,7 +36,7 @@ class Budget {
       category_id: null,
     };
 
-    logger.log('Adding Transaction Budget', { budgetId: this.budget.id, transaction });
+    logger.log('Adding Transaction to Budget', { budgetId: this.budget.id, transaction });
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
   }
 

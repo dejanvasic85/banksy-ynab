@@ -4,7 +4,7 @@ import * as sendgrid from '@sendgrid/mail';
 import logger from './logger';
 
 const toList = (txns: BankTransaction[]): string => {
-  return txns.map(t => `${t.amount} ${t.description} ${t.date}`).join('');
+  return txns.map(t => `$${t.amount.toFixed(2)} <strong>${t.description}</strong> ${t.date}`).join('');
 };
 
 export const sendEmail = async (
@@ -22,7 +22,6 @@ export const sendEmail = async (
 
   if (savedTransactions.length > 0) {
     email += `
-      <h4>Saved Transactions</h4>
       <ul>
     `;
 
@@ -33,6 +32,7 @@ export const sendEmail = async (
   if (possibleDuplicateTransactions.length > 0) {
     email += `
       <h4>Possible Duplicates</h4>
+      <p>Looks like these were added already and are being settled by your bank. Have a quick look and if they are new, please add them manually:</p>
       <ul>
     `;
 
