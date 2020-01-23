@@ -31,7 +31,13 @@ describe('mailer', () => {
   it('sends structured html mail with new and duplicated transactions', async () => {
     const recipient = 'test@email.com';
     const username = 'cool person';
-    const saved = [];
+    const saved = [
+      {
+        amount: 20,
+        date: '20/02/2020',
+        description: 'KFC',
+      },
+    ];
     const possibleDuplicates = [
       {
         amount: 10,
@@ -47,8 +53,7 @@ describe('mailer', () => {
         to: 'test@email.com',
         from: 'ynab@banksy.com',
         subject: 'YNAB Transactions',
-        html: `
-    <h3>Banksy Transactions</h3>\n    <p>Hey: cool person, your bank has reported some new transactions:</p>\n  \n      <h4>Possible Duplicates</h4>\n      <ul>\n    10 McDonalds 10/02/2019</ul>`,
+        html: `\n    <h3>Banksy Transactions</h3>\n    <p>Hey: cool person, your bank has reported some new transactions:</p>\n  \n      <h4>Saved Transactions</h4>\n      <ul>\n    20 KFC 20/02/2020</ul>\n      <h4>Possible Duplicates</h4>\n      <ul>\n    10 McDonalds 10/02/2019</ul>`,
       },
       false,
     ]);
