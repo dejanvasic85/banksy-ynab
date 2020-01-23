@@ -1,5 +1,7 @@
 import * as ynab from 'ynab';
+import * as moment from 'moment';
 import { BudgetAccount, BudgetTransaction } from './types';
+import logger from './logger';
 
 class Budget {
   api: ynab.api;
@@ -15,9 +17,9 @@ class Budget {
   }
 
   getAccounts(): BudgetAccount[] {
-    return this.budget.accounts.map(a => ({
-      accountId: a.id,
-      accountName: a.name,
+    return this.budget.accounts.map(({ id, name }) => ({
+      accountId: id,
+      accountName: name,
     }));
   }
 
@@ -34,8 +36,24 @@ class Budget {
       category_id: null,
     };
 
-    console.log('Creating YNAB Transaction budget:', this.budget.id, 'Transaction:', transaction);
+    logger.log('Adding Transaction to Budget', { budgetId: this.budget.id, transaction });
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
+  }
+
+  async getTransactionsForAccount(accountId: string): Promise<BudgetTransaction[]> {
+    const sinceDate = moment()
+      .subtract(5, 'days')
+      .toISOString();
+
+    const results = await this.api.transactions.getTransactionsByAccount(this.budget.id, accountId, sinceDate);
+    const data = results.data.transactions.map(({ date, amount, memo }) => ({
+      date,
+      amount,
+      memo,
+      accountId,
+    }));
+
+    return data;
   }
 }
 

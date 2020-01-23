@@ -1,3 +1,11 @@
+export interface Config {
+  sendgridKey: string;
+}
+
+export interface SqsMessage {
+  Message: string 
+}
+
 export interface BankTransaction {
   amount: number;
   date: string;
@@ -29,6 +37,7 @@ export interface Bank {
 }
 
 export interface UserConfig {
+  email: string;
   ynabKey: string;
   ynabBudgetId: string;
   banks: Bank[];
@@ -44,4 +53,11 @@ export interface BudgetTransaction {
 export interface BudgetAccount {
   accountName: string;
   accountId: string;
+}
+
+export interface TransactionMap {
+  ignoredCreditTransactions: BankTransaction[];
+  ignoredDebitTransactions: BankTransaction[];
+  ignoredPossibleDuplicates: BankTransaction[];
+  transactions: BankTransaction[];
 }

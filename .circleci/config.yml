@@ -1,7 +1,7 @@
   
 version: 2.1
 jobs:
-  build:
+  test:
     working_directory: ~/banksy-ynab
     docker:
       - image: circleci/node:12.14.1
@@ -20,11 +20,55 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: test
+          name: Test
           command: npm test
 
+  deploy_dev:
+    working_directory: ~/banksy-ynab
+    docker:
+      - image: circleci/node:12.14.1
+    steps:
+      - checkout
       - run:
-          name: deploy
+          name: update-npm
+          command: 'sudo npm install -g npm@6'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Deploy to Dev
+          command: npm run deploy:dev
+        
+  deploy:
+    working_directory: ~/banksy-ynab
+    docker:
+      - image: circleci/node:12.14.1
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@6'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Deploy to Prod
           command: npm run deploy
-          branches:
-            only: master
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy_dev:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore:
+                - master
+      - deploy:
+          requires: 
+            - test
+          filters:
+            branches:
+              only: 
+                - master
