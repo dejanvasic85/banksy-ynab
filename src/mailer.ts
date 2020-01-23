@@ -2,8 +2,6 @@ import { config } from './config';
 import { BankTransaction } from './types';
 import { setApiKey, send } from '@sendgrid/mail';
 
-setApiKey(config.sendgridKey);
-
 const toList = (txns: BankTransaction[]): string => {
   return txns.map(t => `${t.amount} ${t.description} ${t.date}`).join('');
 };
@@ -14,6 +12,8 @@ export const sendEmail = async (
   savedTransactions: BankTransaction[],
   possibleDuplicateTransactions: BankTransaction[],
 ) => {
+  setApiKey(config.sendgridKey);
+
   let email = `
     <h3>Banksy Transactions</h3>
     <p>Hey: ${username}, your bank has reported some new transactions:</p>
