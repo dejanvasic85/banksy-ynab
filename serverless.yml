@@ -63,9 +63,9 @@ resources:
             - Effect: Allow
               Principal: '*'
               Action: sqs:SendMessage
-              Condition:
-                ArnEquals: !GetAtt SqsQueue.Arn
-
+              Resource:
+                Fn::GetAtt: [SqsQueue, Arn]
+          
     SnsSubscription:
       Type: AWS::SNS::Subscription
       Properties:
