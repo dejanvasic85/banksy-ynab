@@ -59,7 +59,6 @@ describe('handler', () => {
         Records: [{ body }],
       };
 
-      console.log(JSON.stringify(event));
       await ynab(event, handlerContext, handlerCallback);
 
       expect(processStub.getCall(0).args).to.eql([snsMessage]);

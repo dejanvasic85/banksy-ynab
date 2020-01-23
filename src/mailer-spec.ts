@@ -3,15 +3,18 @@ import { createSandbox, stub } from 'sinon';
 import * as sendGrid from '@sendgrid/mail';
 import { sendEmail } from './mailer';
 import { config } from './config';
+import logger from './logger';
 
 describe('mailer', () => {
   let setApiKeyStub;
   let sendStub;
   let sandbox;
+  let loggerStub;
 
   before(() => {
     setApiKeyStub = stub(sendGrid, 'setApiKey');
     sendStub = stub(sendGrid, 'send');
+    loggerStub = stub(logger, 'log');
 
     sandbox = createSandbox();
     sandbox.stub(config, 'sendgridKey').value('sendgrid-1234');
@@ -20,12 +23,14 @@ describe('mailer', () => {
   beforeEach(() => {
     setApiKeyStub.resetHistory();
     sendStub.resetHistory();
+    loggerStub.resetHistory();
   });
 
   after(() => {
     setApiKeyStub.restore();
     sendStub.restore();
     sandbox.restore();
+    loggerStub.restore();
   });
 
   it('sends structured html mail with new and duplicated transactions', async () => {
@@ -53,9 +58,8 @@ describe('mailer', () => {
         to: 'test@email.com',
         from: 'ynab@banksy.com',
         subject: 'YNAB Transactions',
-        html: `\n    <h3>Banksy Transactions</h3>\n    <p>Hey: cool person, your bank has reported some new transactions:</p>\n  \n      <h4>Saved Transactions</h4>\n      <ul>\n    20 KFC 20/02/2020</ul>\n      <h4>Possible Duplicates</h4>\n      <ul>\n    10 McDonalds 10/02/2019</ul>`,
+        html: `\n    <h3>Banksy Transactions</h3>\n    <p>Hey <strong>cool person</strong>, your bank has reported some new transactions:</p>\n  \n      <h4>Saved Transactions</h4>\n      <ul>\n    20 KFC 20/02/2020</ul>\n      <h4>Possible Duplicates</h4>\n      <ul>\n    10 McDonalds 10/02/2019</ul>`,
       },
-      false,
     ]);
   });
 });

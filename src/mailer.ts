@@ -1,6 +1,7 @@
 import { config } from './config';
 import { BankTransaction } from './types';
-import { setApiKey, send } from '@sendgrid/mail';
+import * as sendgrid from '@sendgrid/mail';
+import logger from './logger';
 
 const toList = (txns: BankTransaction[]): string => {
   return txns.map(t => `${t.amount} ${t.description} ${t.date}`).join('');
@@ -12,11 +13,11 @@ export const sendEmail = async (
   savedTransactions: BankTransaction[],
   possibleDuplicateTransactions: BankTransaction[],
 ) => {
-  setApiKey(config.sendgridKey);
+  sendgrid.setApiKey(config.sendgridKey);
 
   let email = `
     <h3>Banksy Transactions</h3>
-    <p>Hey: ${username}, your bank has reported some new transactions:</p>
+    <p>Hey <strong>${username}</strong>, your bank has reported some new transactions:</p>
   `;
 
   if (savedTransactions.length > 0) {
@@ -39,13 +40,14 @@ export const sendEmail = async (
     email += `</ul>`;
   }
 
-  await send(
-    {
-      to: recipient,
-      from: 'ynab@banksy.com',
-      subject: 'YNAB Transactions',
-      html: email,
-    },
-    false,
-  );
+  logger.log('Sending email to ', recipient, 'Email:', email);
+
+  await sendgrid.send({
+    to: recipient,
+    from: 'ynab@banksy.com',
+    subject: 'YNAB Transactions',
+    html: email,
+  });
+
+  logger.log('Email sent');
 };

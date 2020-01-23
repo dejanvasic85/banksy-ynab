@@ -1,6 +1,7 @@
 import * as ynab from 'ynab';
 import * as moment from 'moment';
 import { BudgetAccount, BudgetTransaction } from './types';
+import logger from './logger';
 
 class Budget {
   api: ynab.api;
@@ -35,6 +36,7 @@ class Budget {
       category_id: null,
     };
 
+    logger.log('Adding Transaction Budget', { budgetId: this.budget.id, transaction });
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
   }
 
