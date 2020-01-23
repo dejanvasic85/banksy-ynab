@@ -1,9 +1,4 @@
 import * as AWS from 'aws-sdk';
-AWS.config.update({
-  accessKeyId: 'AKIAQJNYCGAACCUOMQ4F',
-  secretAccessKey: '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',
-  region: 'ap-southeast-2',
-});
 
 const snsTopicArn = 'arn:aws:sns:ap-southeast-2:020250243072:banksy-transactions-dev';
 const snsClient = new AWS.SNS();
