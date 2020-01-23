@@ -9,7 +9,6 @@ custom:
     webpackConfig: ./webpack.config.js
     includeModules: true
 
-# Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
 
@@ -35,7 +34,7 @@ resources:
       Properties:
         DisplayName: ${self:custom.sns}
         TopicName: ${self:custom.sns}
-      
+
     SqsQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -52,7 +51,7 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.sqs}-deadletter
-    
+
     SnsSubscription:
       Type: AWS::SNS::Subscription
       Properties:
@@ -60,10 +59,10 @@ resources:
         Endpoint: !GetAtt SqsQueue.Arn
         TopicArn: !Ref SnsTopic
 
-
 functions:
   ynab:
     handler: src/handler.ynab
+    timeout: 60
     events:
       - sqs:
           arn:
