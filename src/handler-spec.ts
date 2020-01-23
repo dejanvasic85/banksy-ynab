@@ -64,6 +64,17 @@ describe('handler', () => {
       expect(loggerStub.getCalls()).to.have.lengthOf(0);
     });
 
-    it('should log an error when it cannot parse');
+    it('should log an error when it cannot parse', async () => {
+      const event = {
+        ...baseEvent,
+        Records: [{ body: 'really bad data' }],
+      };
+
+      try {
+        await ynab(event, handlerContext, handlerCallback);
+      } catch (err) {
+        expect(loggerStub.getCalls()).to.have.lengthOf(1);
+      }
+    });
   });
 });
