@@ -41,8 +41,9 @@ describe('handler', () => {
     ];
 
     const snsMessage = {
-      username: 'spec',
-      accountName: 'Complete Freedom Offset',
+      username: 'john',
+      bankId: 'aaa',
+      accountName: 'Savings',
       transactions: testTransactions,
     };
 
@@ -58,6 +59,7 @@ describe('handler', () => {
         Records: [{ body }],
       };
 
+      console.log(JSON.stringify(event));
       await ynab(event, handlerContext, handlerCallback);
 
       expect(processStub.getCall(0).args).to.eql([snsMessage]);

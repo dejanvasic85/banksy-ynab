@@ -1,0 +1,7 @@
+{
+  "Records": [
+    {
+      "body": "{\"Message\":\"{\\\"username\\\":\\\"john\\\",\\\"bankId\\\":\\\"aaa\\\",\\\"accountName\\\":\\\"Savings\\\",\\\"transactions\\\":[{\\\"date\\\":\\\"2020-01-23T06:53:17.003Z\\\",\\\"amount\\\":-5,\\\"description\\\":\\\"Test Transaction 2020-01-23T06:53:17.003Z\\\"}]}\"}"
+    }
+  ]
+}

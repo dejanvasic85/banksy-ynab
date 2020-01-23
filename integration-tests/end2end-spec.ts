@@ -14,7 +14,8 @@ describe('end 2 end test', () => {
   ];
 
   const snsMessage = {
-    username: 'spec',
+    username: 'john',
+    bankId: 'aaa',
     accountName: 'Complete Freedom Offset',
     transactions: testTransactions,
   };

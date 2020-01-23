@@ -4,6 +4,7 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
+    "start": "sls invoke local -f ynab -p sample-event.json --stage dev",
     "deploy": "sls deploy",
     "deploy:dev": "sls deploy --stage dev",
     "destroy:dev": "sls remove --stage dev",
