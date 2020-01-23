@@ -52,6 +52,20 @@ resources:
       Properties:
         QueueName: ${self:custom.sqs}-deadletter
 
+    SqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        Queues:
+          - Ref: SqsQueue
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: sqs:SendMessage
+              Condition:
+                ArnEquals: !GetAtt SqsQueue.Arn
+
     SnsSubscription:
       Type: AWS::SNS::Subscription
       Properties:
