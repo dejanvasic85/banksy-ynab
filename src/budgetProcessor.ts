@@ -19,6 +19,9 @@ export const processBudgetMessage = async (data: TransactionsMessage): Promise<v
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
   const existingBudgetTransactions = await budget.getTransactionsForAccount(accountId);
+
+  logger.info('Existing Budget Transactions', { existingBudgetTransactions });
+
   const transactionMap: TransactionMap = data.transactions.reduce(
     toTransactionMap(account, existingBudgetTransactions),
     initialTransactionMap,
