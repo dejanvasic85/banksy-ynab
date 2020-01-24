@@ -9,6 +9,7 @@ describe('Budget Integration tests', () => {
     await budget.loadBudget(YNAB_BUDGET_ID);
 
     const txns = await budget.getTransactionsForAccount(YNAB_ACCOUNT_ID);
+
     expect(txns).to.be.an('array');
   });
 });

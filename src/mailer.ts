@@ -4,7 +4,7 @@ import * as sendgrid from '@sendgrid/mail';
 import logger from './logger';
 
 const toList = (txns: BankTransaction[]): string => {
-  return txns.map(t => `$${t.amount.toFixed(2)} <strong>${t.description}</strong> ${t.date}`).join('');
+  return txns.map(t => `<li>$${t.amount.toFixed(2)} <strong>${t.description}</strong> ${t.date}</li>`).join('');
 };
 
 export const sendEmail = async (

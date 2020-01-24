@@ -27,7 +27,7 @@ describe('toTransactionMap', () => {
       date: yesterday,
     },
     {
-      amount: 200,
+      amount: 6,
       description: 'PENDING - BARRY PLANT RENT INCOME',
       date: twoDaysAgo,
     },
@@ -65,7 +65,7 @@ describe('toTransactionMap', () => {
       ]);
       expect(result.ignoredCreditTransactions).to.eql([
         {
-          amount: 200,
+          amount: 6,
           description: 'PENDING - BARRY PLANT RENT INCOME',
           date: twoDaysAgo,
         },
@@ -105,7 +105,7 @@ describe('toTransactionMap', () => {
       ]);
       expect(result.transactions).to.eql([
         {
-          amount: 200,
+          amount: 6,
           description: 'PENDING - BARRY PLANT RENT INCOME',
           date: twoDaysAgo,
         },
@@ -121,7 +121,7 @@ describe('toTransactionMap', () => {
 
       const budgetTransactions: any[] = [
         {
-          amount: 200,
+          amount: 6000,  // Transactions from YNAB come as base Value
           memo: 'Barry Plant Rent Income',
           date: today,
         },
@@ -138,7 +138,7 @@ describe('toTransactionMap', () => {
       expect(result.ignoredCreditTransactions).to.have.lengthOf(0);
       expect(result.ignoredPossibleDuplicates).to.eql([
         {
-          amount: 200,
+          amount: 6,
           description: 'PENDING - BARRY PLANT RENT INCOME',
           date: twoDaysAgo,
         },
