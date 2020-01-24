@@ -4,8 +4,7 @@ import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
 import { toTransactionMap, initialTransactionMap } from './transactionReducer';
 import { sendEmail } from './mailer';
-
-const AUD_BASE = 1000;
+import { toBaseValue } from './money';
 
 export const processBudgetMessage = async (data: TransactionsMessage): Promise<void> => {
   logger.info('YNAB Handler: Received message', data);
@@ -20,20 +19,16 @@ export const processBudgetMessage = async (data: TransactionsMessage): Promise<v
 
   const existingBudgetTransactions = await budget.getTransactionsForAccount(accountId);
 
-  logger.info('Existing Budget Transactions', { existingBudgetTransactions });
-
   const transactionMap: TransactionMap = data.transactions.reduce(
     toTransactionMap(account, existingBudgetTransactions),
     initialTransactionMap,
   );
 
   for (const { amount, date, description } of transactionMap.transactions) {
-    const baseAmount = amount * AUD_BASE;
-
     await budget.addTransaction({
       date,
       memo: description,
-      amount: baseAmount,
+      amount: toBaseValue(amount),
       accountId,
     });
   }

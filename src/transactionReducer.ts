@@ -1,4 +1,5 @@
 import { TransactionMap, BankTransaction, BankAccount, BudgetTransaction, TransactionType } from './types';
+import { fromBaseValue } from './money';
 
 export const initialTransactionMap: TransactionMap = {
   ignoredCreditTransactions: [],
@@ -42,7 +43,11 @@ export const toTransactionMap = (account: BankAccount, budgetTransactions: Budge
       };
     }
 
-    if (budgetTransactions.some(({ amount, memo }) => amount === txn.amount && isMemoSimilar(memo, txn.description))) {
+    if (
+      budgetTransactions.some(
+        ({ amount, memo }) => fromBaseValue(amount) === txn.amount && isMemoSimilar(memo, txn.description),
+      )
+    ) {
       return {
         ...acc,
         ignoredPossibleDuplicates: [...acc.ignoredPossibleDuplicates, txn],
