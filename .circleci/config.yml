@@ -42,7 +42,7 @@ jobs:
             - ./node_modules
       - run:
           name: Integration test
-          command: npm test:integration
+          command: npm run test:integration
 
   deploy_dev:
     working_directory: ~/banksy-ynab
@@ -79,13 +79,7 @@ workflows:
   test_and_deploy:
     jobs:
       - test
-      - integration_test:
-          requires:
-            - test
-          filters:
-            branches:
-              ignore:
-                - master
+
       - deploy_dev:
           requires:
             - test
@@ -93,6 +87,15 @@ workflows:
             branches:
               ignore:
                 - master
+
+      - integration_test:
+        requires:
+          - test
+        filters:
+          branches:
+            ignore:
+              - master
+
       - deploy:
           requires:
             - test
