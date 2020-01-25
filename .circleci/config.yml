@@ -76,7 +76,7 @@ jobs:
 
 workflows:
   version: 2
-  test_and_deploy:
+  build-test-and-deploy:
     jobs:
       - test
       - deploy_dev:
@@ -87,12 +87,12 @@ workflows:
               ignore:
                 - master
       - integration_test:
-        requires:
-          - deploy_dev
-        filters:
-          branches:
-            ignore:
-              - master
+          requires:
+            - deploy_dev
+          filters:
+            branches:
+              ignore:
+                - master
       - deploy:
           requires:
             - test
