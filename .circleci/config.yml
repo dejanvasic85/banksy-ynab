@@ -79,7 +79,7 @@ workflows:
   test_and_deploy:
     jobs:
       - test
-      - integration:
+      - integration_test:
           requires:
             - test
           filters:
