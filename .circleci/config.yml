@@ -89,10 +89,10 @@ workflows:
       - integration_test:
         requires:
           - deploy_dev
-          filters:
-            branches:
-              ignore:
-                - master
+        filters:
+          branches:
+            ignore:
+              - master
       - deploy:
           requires:
             - test
