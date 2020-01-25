@@ -11,8 +11,7 @@
     "test": "mocha -r ts-node/register './src/**/*spec.ts'",
     "test:watch": "mocha -r ts-node/register './src/**/*spec.ts' -w",
     "test:single": "mocha -r ts-node/register ./src/**/$test*spec.ts --watch-extensions ts --w",
-    "test:integration": "mocha -r ts-node/register ./integration-tests/end2end-spec.ts --timeout 30000",
-    "test:ynab": "mocha -r ts-node/register ./integration-tests/budget-spec.ts --timeout 30000"
+    "test:integration": "mocha -r ts-node/register ./integration-tests/end2end-spec.ts --timeout 30000"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.5.0",

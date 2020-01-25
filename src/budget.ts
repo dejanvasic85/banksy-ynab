@@ -40,9 +40,9 @@ class Budget {
     await this.api.transactions.createTransaction(this.budget.id, { transaction });
   }
 
-  async getTransactionsForAccount(accountId: string): Promise<BudgetTransaction[]> {
+  async getTransactionsForAccount(accountId: string, days: number = 5): Promise<BudgetTransaction[]> {
     const sinceDate = moment()
-      .subtract(5, 'days')
+      .subtract(days, 'days')
       .toISOString();
 
     const results = await this.api.transactions.getTransactionsByAccount(this.budget.id, accountId, sinceDate);
