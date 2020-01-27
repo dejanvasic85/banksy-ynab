@@ -29,7 +29,7 @@
     "@types/sinon": "7.5.1",
     "chai": "4.2.0",
     "fork-ts-checker-webpack-plugin": "4.0.2",
-    "mocha": "7.0.0",
+    "mocha": "7.0.1",
     "serverless": "1.61.3",
     "serverless-webpack": "5.3.1",
     "sinon": "8.1.1",
