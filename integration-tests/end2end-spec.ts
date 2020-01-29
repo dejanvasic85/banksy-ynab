@@ -36,7 +36,8 @@ describe('end 2 end test', () => {
   let budget: Budget;
 
   const now = new Date().toISOString();
-  const description = `Test Transaction ${now}`;
+  const suffix = `${Math.floor(Math.random() * 10000)}`;
+  const description = `txn ${suffix}`;
   const testTransactions = [
     {
       date: now,
