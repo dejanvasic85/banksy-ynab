@@ -121,14 +121,39 @@ describe('toTransactionMap', () => {
 
       const budgetTransactions: any[] = [
         {
-          amount: 6000,  // Transactions from YNAB come as base Value
+          amount: 6000, // Transactions from YNAB come as base Value
           memo: 'Barry Plant Rent Income',
+          date: today,
+        },
+        {
+          amount: -9000,
+          memo: 'AMZNPRIMEAU MEMBERSHIP+611800064122 AU',
+          date: yesterday,
+        },
+        {
+          amount: -8000,
+          memo: 'Shorty',
+          date: yesterday,
+        },
+      ];
+
+      const newTransactions = [
+        {
+          amount: -9,
+          description: 'Amznprimeau Membership Sydney South Au',
+          date: today,
+        },
+        {
+          amount: -8,
+          description: '   shoRTY  ',
           date: today,
         },
       ];
 
+      const bankTransactions = [...transactions, ...newTransactions];
+
       // Action
-      const result: TransactionMap = transactions.reduce(
+      const result: TransactionMap = bankTransactions.reduce(
         toTransactionMap(bankAccount, budgetTransactions),
         initialTransactionMap,
       );
@@ -141,6 +166,16 @@ describe('toTransactionMap', () => {
           amount: 6,
           description: 'PENDING - BARRY PLANT RENT INCOME',
           date: twoDaysAgo,
+        },
+        {
+          amount: -9,
+          description: 'Amznprimeau Membership Sydney South Au',
+          date: today,
+        },
+        {
+          amount: -8,
+          description: '   shoRTY  ',
+          date: today,
         },
       ]);
       expect(result.transactions).to.eql([

@@ -8,21 +8,16 @@ export const initialTransactionMap: TransactionMap = {
   transactions: [],
 };
 
-export const isMemoSimilar = (firstMemo: string, secondMemo: string): boolean => {
-  if (!firstMemo && !secondMemo) {
-    return true;
-  }
+const clean = (val: string): string => {
+  return (val || '')
+    .toLowerCase()
+    .replace(/pending - /, '')
+    .substr(0, 10)
+    .trim();
+};
 
-  return (
-    (firstMemo || '')
-      .toLowerCase()
-      .replace(/pending - /, '')
-      .trim() ===
-    (secondMemo || '')
-      .toLowerCase()
-      .replace(/pending - /, '')
-      .trim()
-  );
+export const isMemoSimilar = (firstMemo: string, secondMemo: string): boolean => {
+  return clean(firstMemo) === clean(secondMemo);
 };
 
 export const toTransactionMap = (account: BankAccount, budgetTransactions: BudgetTransaction[]): any => {
