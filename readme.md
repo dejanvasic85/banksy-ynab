@@ -15,11 +15,11 @@
 
 ### Bank Transaction:
 
-| Property    | Type   |                      e.g. |
-| ----------- | ------ | ------------------------: |
-| amount      | number |                       -20 |
-| date        | string | 2019-12-22T00:00:00+11:00 |
-| description | string |                McDonald's |
+| Property    | Type                     |                      e.g. |
+| ----------- | ------------------------ | ------------------------: |
+| amount      | number                   |                       -20 |
+| date        | string (date ISO Format) | 2019-12-22T00:00:00+11:00 |
+| description | string                   |                McDonald's |
 
 Amount field is converted automatically to cents as 100 base points, so -20 will be posted as -20000 to YNAB.
 
@@ -27,4 +27,12 @@ The date field is simply a string and is directly forwarded to YNAB. It should c
 
 ## Secrets
 
-Each user will have their configuration that includes YNAB api key and account details in a JSON stored AWS Secret. 
+Each user will have their configuration that includes YNAB api key and account details in a JSON stored AWS Secret.
+
+## Architecture
+
+This application is only responsible for subscribing to user transactions and filtering + posting them to YNAB.
+[Banksy](https://github.com/dejanvasic85/banksy) is responsible for fetching/scraping the transactions from the various supported banks.
+
+![Architecture Diagram](https://drive.google.com/uc?id=1orR5fQEn99HU-6cKs8hh9JQznay0Qzy_)
+
