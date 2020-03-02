@@ -36,7 +36,7 @@
     "ts-loader": "6.2.1",
     "ts-node": "8.6.2",
     "typescript": "3.8.2",
-    "webpack": "4.41.6",
+    "webpack": "4.42.0",
     "webpack-node-externals": "1.7.2"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
