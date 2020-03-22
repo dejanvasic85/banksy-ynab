@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import { processBudgetMessage } from './budgetProcessor';
-import { TransactionsMessage, BankTransaction } from './types';
+import { BankTransaction } from './types';
 import logger from './logger';
 import * as secretFetcher from './secretFetcher';
 import * as budget from './budget';
@@ -14,10 +14,9 @@ describe('budgetProcessor', () => {
     let getAccountsStub;
     let addTransactionStub;
     let loggerInfoStub;
-    let getTransactionsForAccountStub;
     let sendEmailStub;
 
-    const transactions: BankTransaction[] = [
+    const newTxns: BankTransaction[] = [
       {
         amount: -80,
         date: '2020-01-13T20:41:09.685Z',
@@ -25,11 +24,11 @@ describe('budgetProcessor', () => {
       },
     ];
 
-    const data: TransactionsMessage = {
+    const data: any = {
       bankId: 'cba',
       accountName: 'savings',
       username: 'john',
-      transactions,
+      newTxns,
     };
 
     before(() => {
@@ -37,7 +36,6 @@ describe('budgetProcessor', () => {
       loadBudgetStub = stub(budget.Budget.prototype, 'loadBudget');
       getAccountsStub = stub(budget.Budget.prototype, 'getAccounts');
       addTransactionStub = stub(budget.Budget.prototype, 'addTransaction');
-      getTransactionsForAccountStub = stub(budget.Budget.prototype, 'getTransactionsForAccount');
       loggerInfoStub = stub(logger, 'info');
       sendEmailStub = stub(mailer, 'sendEmail');
     });
@@ -48,7 +46,6 @@ describe('budgetProcessor', () => {
       getAccountsStub.resetHistory();
       addTransactionStub.resetHistory();
       loggerInfoStub.resetHistory();
-      getTransactionsForAccountStub.resetHistory();
       sendEmailStub.resetHistory();
     });
 
@@ -58,7 +55,6 @@ describe('budgetProcessor', () => {
       getAccountsStub.restore();
       addTransactionStub.restore();
       loggerInfoStub.restore();
-      getTransactionsForAccountStub.restore();
       sendEmailStub.restore();
     });
 
@@ -87,23 +83,10 @@ describe('budgetProcessor', () => {
         },
       ]);
 
-      getTransactionsForAccountStub.resolves([]);
-
       await processBudgetMessage(data);
 
       // Assert
-      expect(sendEmailStub.getCall(0).args).to.eql([
-        'john@email.com',
-        'john',
-        [
-          {
-            amount: -80,
-            date: '2020-01-13T20:41:09.685Z',
-            description: 'mcdonalds',
-          },
-        ],
-        [],
-      ]);
+      expect(sendEmailStub.getCall(0).args).to.eql(['john@email.com', data]);
       expect(loadBudgetStub.calledWith('budget321')).to.equal(true);
       expect(addTransactionStub.getCalls().length).to.equal(1);
       expect(addTransactionStub.getCall(0).args).to.eql([

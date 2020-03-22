@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { createSandbox, stub } from 'sinon';
 import * as sendGrid from '@sendgrid/mail';
+
 import { sendEmail } from './mailer';
 import { config } from './config';
 import logger from './logger';
@@ -35,23 +36,26 @@ describe('mailer', () => {
 
   it('sends structured html mail with new and duplicated transactions', async () => {
     const recipient = 'test@email.com';
-    const username = 'cool person';
-    const saved = [
-      {
-        amount: 20,
-        date: '20/02/2020',
-        description: 'KFC',
-      },
-    ];
-    const possibleDuplicates = [
-      {
-        amount: 10,
-        date: '10/02/2019',
-        description: 'McDonalds',
-      },
-    ];
+    const data: any = {
+      username: 'cool-username-bro',
+      newTxns: [
+        {
+          amount: 20,
+          date: '20/02/2020',
+          description: 'KFC',
+        },
+      ],
+      duplicateTxns: [
+        {
+          amount: 10,
+          date: '10/02/2019',
+          description: 'McDonalds',
+        },
+      ],
+      matchingTxns: [],
+    };
 
-    await sendEmail(recipient, username, saved, possibleDuplicates);
+    await sendEmail(recipient, data);
 
     expect(sendStub.getCalls()).to.have.lengthOf(1);
   });
