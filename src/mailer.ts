@@ -1,6 +1,7 @@
-import { config } from './config';
-import { BankTransaction } from './types';
 import * as sendgrid from '@sendgrid/mail';
+
+import { config } from './config';
+import { BankTransaction, TransactionsMessage } from './types';
 import logger from './logger';
 
 const toList = (txns: BankTransaction[]): string => {
@@ -9,9 +10,7 @@ const toList = (txns: BankTransaction[]): string => {
 
 export const sendEmail = async (
   recipient: string,
-  username: string,
-  savedTransactions: BankTransaction[],
-  possibleDuplicateTransactions: BankTransaction[],
+  { username, newTxns, duplicateTxns, matchingTxns }: TransactionsMessage,
 ) => {
   sendgrid.setApiKey(config.sendgridKey);
 
@@ -20,23 +19,34 @@ export const sendEmail = async (
     <p>Hey <strong>${username}</strong>, your bank has reported some new transactions:</p>
   `;
 
-  if (savedTransactions.length > 0) {
+  if (newTxns.length > 0) {
     email += `
       <ul>
     `;
 
-    email += toList(savedTransactions);
+    email += toList(newTxns);
     email += `</ul>`;
   }
 
-  if (possibleDuplicateTransactions.length > 0) {
+  if (duplicateTxns.length > 0) {
     email += `
-      <h4>Possible Duplicates</h4>
+      <h4>Possible Duplicates Transactions</h4>
       <p>Looks like these were added already and are being settled by your bank. Have a quick look and if they are new, please add them manually:</p>
       <ul>
     `;
 
-    email += toList(possibleDuplicateTransactions);
+    email += toList(duplicateTxns);
+    email += `</ul>`;
+  }
+
+  if (matchingTxns.length > 0) {
+    email += `
+      <h4>Matching Transactions</h4>
+      <p>These have been identified as idential and already added to YNAB:</p>
+      <ul>
+    `;
+
+    email += toList(duplicateTxns);
     email += `</ul>`;
   }
 

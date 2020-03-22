@@ -1,8 +1,7 @@
 import logger from './logger';
-import { TransactionsMessage, TransactionMap } from './types';
+import { TransactionsMessage } from './types';
 import { getUserConfigSecret } from './secretFetcher';
 import { Budget } from './budget';
-import { toTransactionMap, initialTransactionMap } from './transactionReducer';
 import { sendEmail } from './mailer';
 import { toBaseValue } from './money';
 
@@ -17,14 +16,7 @@ export const processBudgetMessage = async (data: TransactionsMessage): Promise<v
   await budget.loadBudget(ynabBudgetId);
   const { accountId } = budget.getAccounts().find(ba => ba.accountName === account.ynabAccountName);
 
-  const existingBudgetTransactions = await budget.getTransactionsForAccount(accountId);
-
-  const transactionMap: TransactionMap = data.transactions.reduce(
-    toTransactionMap(account, existingBudgetTransactions),
-    initialTransactionMap,
-  );
-
-  for (const { amount, date, description } of transactionMap.transactions) {
+  for (const { amount, date, description } of data.newTxns) {
     await budget.addTransaction({
       date,
       memo: description,
@@ -33,5 +25,5 @@ export const processBudgetMessage = async (data: TransactionsMessage): Promise<v
     });
   }
 
-  await sendEmail(email, data.username, transactionMap.transactions, transactionMap.ignoredPossibleDuplicates);
+  await sendEmail(email, data);
 };

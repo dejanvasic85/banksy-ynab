@@ -16,7 +16,9 @@ export interface TransactionsMessage {
   username: string;
   bankId: string;
   accountName: string;
-  transactions: BankTransaction[];
+  newTxns: BankTransaction[];
+  matchingTxns: BankTransaction[];
+  duplicateTxns: BankTransaction[];
 }
 
 export enum TransactionType {
@@ -53,11 +55,4 @@ export interface BudgetTransaction {
 export interface BudgetAccount {
   accountName: string;
   accountId: string;
-}
-
-export interface TransactionMap {
-  ignoredCreditTransactions: BankTransaction[];
-  ignoredDebitTransactions: BankTransaction[];
-  ignoredPossibleDuplicates: BankTransaction[];
-  transactions: BankTransaction[];
 }
