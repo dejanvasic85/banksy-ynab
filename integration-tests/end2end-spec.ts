@@ -1,5 +1,7 @@
 import * as AWS from 'aws-sdk';
+
 import { Budget } from '../src/budget';
+import { TransactionsMessage } from '../src/types';
 
 AWS.config.update({
   region: 'ap-southeast-2',
@@ -46,11 +48,13 @@ describe('end 2 end test', () => {
     },
   ];
 
-  const snsMessage = {
+  const snsMessage: TransactionsMessage = {
     username: 'john',
     bankId: 'aaa',
     accountName: 'Savings',
-    transactions: testTransactions,
+    newTxns: testTransactions,
+    duplicateTxns: [],
+    matchingTxns: [],
   };
 
   before(async () => {
