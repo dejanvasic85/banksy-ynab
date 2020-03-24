@@ -77,6 +77,7 @@ functions:
   ynab:
     handler: src/handler.ynab
     timeout: 60
+    memorySize: 256
     events:
       - sqs:
           arn:
