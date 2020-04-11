@@ -15,17 +15,17 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.0.0",
-    "aws-sdk": "^2.590.0",
+    "aws-sdk": "^2.656.0",
     "moment": "^2.24.0",
     "source-map-support": "^0.5.10",
-    "ynab": "^1.17.0"
+    "ynab": "^1.18.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.48",
     "@types/chai": "4.2.11",
     "@types/mocha": "7.0.2",
     "@types/moment": "2.13.0",
-    "@types/node": "10.17.19",
+    "@types/node": "13.11.1",
     "@types/sinon": "9.0.0",
     "chai": "4.2.0",
     "fork-ts-checker-webpack-plugin": "4.1.3",
