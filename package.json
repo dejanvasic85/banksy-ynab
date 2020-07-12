@@ -37,7 +37,7 @@
     "ts-node": "8.10.2",
     "typescript": "3.9.6",
     "webpack": "4.43.0",
-    "webpack-node-externals": "2.3.0"
+    "webpack-node-externals": "2.5.0"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
