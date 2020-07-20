@@ -21,23 +21,23 @@
     "ynab": "^1.18.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.58",
+    "@types/aws-lambda": "8.10.59",
     "@types/chai": "4.2.11",
-    "@types/mocha": "7.0.2",
+    "@types/mocha": "8.0.0",
     "@types/moment": "2.13.0",
-    "@types/node": "13.13.13",
+    "@types/node": "13.13.14",
     "@types/sinon": "9.0.4",
     "chai": "4.2.0",
     "fork-ts-checker-webpack-plugin": "5.0.7",
     "mocha": "8.0.1",
-    "serverless": "1.73.1",
+    "serverless": "1.75.1",
     "serverless-webpack": "5.3.2",
     "sinon": "9.0.2",
-    "ts-loader": "8.0.0",
+    "ts-loader": "8.0.1",
     "ts-node": "8.10.2",
-    "typescript": "3.9.6",
+    "typescript": "3.9.7",
     "webpack": "4.43.0",
-    "webpack-node-externals": "2.3.0"
+    "webpack-node-externals": "2.5.0"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
