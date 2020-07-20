@@ -34,7 +34,7 @@ describe('mailer', () => {
     loggerStub.restore();
   });
 
-  it('sends structured html mail with new and duplicated transactions', async () => {
+  it('sends structured html mail with new transactions', async () => {
     const recipient = 'test@email.com';
     const data: any = {
       username: 'cool-username-bro',
@@ -45,14 +45,6 @@ describe('mailer', () => {
           description: 'KFC',
         },
       ],
-      duplicateTxns: [
-        {
-          amount: 10,
-          date: '10/02/2019',
-          description: 'McDonalds',
-        },
-      ],
-      matchingTxns: [],
     };
 
     await sendEmail(recipient, data);

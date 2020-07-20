@@ -18,7 +18,7 @@ describe('budgetProcessor', () => {
 
     const newTxns: BankTransaction[] = [
       {
-        amount: -80,
+        amount: -129.48,
         date: '2020-01-13T20:41:09.685Z',
         description: 'mcdonalds',
       },
@@ -92,7 +92,7 @@ describe('budgetProcessor', () => {
       expect(addTransactionStub.getCall(0).args).to.eql([
         {
           memo: 'mcdonalds',
-          amount: -80000,
+          amount: -129480,
           accountId: 'ynab-account-id-123',
           date: '2020-01-13T20:41:09.685Z',
         },

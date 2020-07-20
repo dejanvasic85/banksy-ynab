@@ -17,8 +17,6 @@ export interface TransactionsMessage {
   bankId: string;
   accountName: string;
   newTxns: BankTransaction[];
-  matchingTxns: BankTransaction[];
-  duplicateTxns: BankTransaction[];
 }
 
 export enum TransactionType {

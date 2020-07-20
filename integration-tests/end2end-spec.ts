@@ -53,8 +53,6 @@ describe('end 2 end test', () => {
     bankId: 'aaa',
     accountName: 'Savings',
     newTxns: testTransactions,
-    duplicateTxns: [],
-    matchingTxns: [],
   };
 
   before(async () => {
