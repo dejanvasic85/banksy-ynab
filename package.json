@@ -30,7 +30,7 @@
     "chai": "4.2.0",
     "fork-ts-checker-webpack-plugin": "5.0.12",
     "mocha": "8.0.1",
-    "serverless": "1.77.1",
+    "serverless": "1.78.0",
     "serverless-webpack": "5.3.3",
     "sinon": "9.0.2",
     "ts-loader": "8.0.1",
