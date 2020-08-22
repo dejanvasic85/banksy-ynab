@@ -26,7 +26,7 @@
     "@types/mocha": "8.0.2",
     "@types/moment": "2.13.0",
     "@types/node": "13.13.15",
-    "@types/sinon": "9.0.4",
+    "@types/sinon": "9.0.5",
     "chai": "4.2.0",
     "fork-ts-checker-webpack-plugin": "5.0.14",
     "mocha": "8.1.1",
