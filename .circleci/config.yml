@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/banksy-ynab
     docker:
-      - image: circleci/node:12.19.0
+      - image: circleci/node:12.20.0
     steps:
       - checkout
       - run:
@@ -25,7 +25,7 @@ jobs:
   integration_test:
     working_directory: ~/banksy-ynab
     docker:
-      - image: circleci/node:12.19.0
+      - image: circleci/node:12.20.0
     steps:
       - checkout
       - run:
@@ -47,7 +47,7 @@ jobs:
   deploy_dev:
     working_directory: ~/banksy-ynab
     docker:
-      - image: circleci/node:12.19.0
+      - image: circleci/node:12.20.0
     steps:
       - checkout
       - run:
@@ -62,7 +62,7 @@ jobs:
   deploy:
     working_directory: ~/banksy-ynab
     docker:
-      - image: circleci/node:12.19.0
+      - image: circleci/node:12.20.0
     steps:
       - checkout
       - run:
