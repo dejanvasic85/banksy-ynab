@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.64",
     "@types/chai": "4.2.14",
-    "@types/mocha": "8.0.4",
+    "@types/mocha": "8.2.0",
     "@types/moment": "2.13.0",
     "@types/node": "13.13.34",
     "@types/sinon": "9.0.8",
