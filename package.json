@@ -28,7 +28,7 @@
     "@types/node": "13.13.39",
     "@types/sinon": "9.0.10",
     "chai": "4.2.0",
-    "fork-ts-checker-webpack-plugin": "6.0.8",
+    "fork-ts-checker-webpack-plugin": "6.1.0",
     "mocha": "8.2.1",
     "serverless": "2.2.0",
     "serverless-webpack": "5.3.5",
