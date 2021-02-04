@@ -27,7 +27,7 @@
     "@types/moment": "2.13.0",
     "@types/node": "13.13.40",
     "@types/sinon": "9.0.10",
-    "chai": "4.2.0",
+    "chai": "4.3.0",
     "fork-ts-checker-webpack-plugin": "6.1.0",
     "mocha": "8.2.1",
     "serverless": "2.2.0",
