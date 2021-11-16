@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.0.0",
-    "aws-sdk": "^2.656.0",
+    "aws-sdk": "^2.814.0",
     "moment": "^2.24.0",
     "source-map-support": "^0.5.10",
     "ynab": "^1.18.0"
